@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - geometry - cube</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="../three.js/examples/main.css">
+	</head>
+	<body>
+
+		<script type="module">
+
+			import * as THREE from '../three.js/build/three.module.js';
+
+			import { OrbitControls } from '../three.js/examples/jsm/controls/OrbitControls.js';	
+			import { CameraControls } from '../three.js/examples/jsm/controls/experimental/CameraControls.js';
+
+
+			let camera, scene, renderer;
+			let plane;
+			let pointer, raycaster, isShiftDown = false;
+
+			let rollOverMesh, rollOverMaterial;
+			let cubeGeo, cubeMaterial;
+
+			const objects = [];
+
+			init();
+			render();
+
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.set( 500, 800, 1300 );
+				camera.lookAt( 0, 0, 0 );
+
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0xADD8E6 );
+				
+				//south wall
+				let x = -500;
+				let y = 25;
+				let z = 475;
+				for(var i = 0; i<3; i++){
+					for(var j = 0; j<20; j++){
+						const wall = new THREE.BoxGeometry( 50, 50, 50 );
+						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const cube = new THREE.Mesh( wall, material );
+						cube.position.set(x+25,y,z)
+						x=x+50;
+						scene.add( cube );
+					}
+					x=-500;
+					y=y+50;
+				}
+				let indent = 0;
+				for(var j = 0; j<20; j++){
+					if(indent%2==0){
+						const wall = new THREE.BoxGeometry( 50, 50, 50 );
+						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const cube = new THREE.Mesh( wall, material );
+						cube.position.set(x+25,y,z);
+						x=x+50;
+						scene.add( cube );
+						indent+=1;
+					}else{
+						indent+=1;
+						x=x+50
+						continue;
+					}
+					
+				}
+				
+
+				//north wall
+				x = -500;
+				y = 25;
+				z = -475;
+				for(var i = 0; i<3; i++){
+					for(var j = 0; j<20; j++){
+						const wall = new THREE.BoxGeometry( 50, 50, 50 );
+						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const cube = new THREE.Mesh( wall, material );
+						cube.position.set(x+25,y,z);
+						x=x+50;
+						scene.add( cube );
+					}
+					x=-500;
+					y=y+50;
+				}
+				for(var j = 0; j<20; j++){
+					if(indent%2==0){
+						const wall = new THREE.BoxGeometry( 50, 50, 50 );
+						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const cube = new THREE.Mesh( wall, material );
+						cube.position.set(x+25,y,z);
+						x=x+50;
+						scene.add( cube );
+						indent+=1;
+					}else{
+						indent+=1;
+						x=x+50
+						continue;
+					}
+				}
+				
+
+				//east wall
+				x = -475;
+				y = 25;
+				z = -475;
+				for(var i = 0; i<3; i++){
+					for(var j = 0; j<20; j++){
+						const wall = new THREE.BoxGeometry( 50, 50, 50 );
+						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const cube = new THREE.Mesh( wall, material );
+						cube.position.set(x,y,z);
+						z=z+50;
+						scene.add( cube );
+					}
+					z=-475;
+					y=y+50;
+				}
+				for(var j = 0; j<20; j++){
+					if(indent%2==0){
+						const wall = new THREE.BoxGeometry( 50, 50, 50 );
+						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const cube = new THREE.Mesh( wall, material );
+						cube.position.set(x,y,z);
+						z=z+50;
+						scene.add( cube );
+						indent+=1;
+					}else{
+						indent+=1;
+						z=z+50
+						continue;
+					}
+						
+				}
+
+				//west wall
+				x = 475;
+				y = 25;
+				z = -475;
+				for(var i = 0; i<3; i++){
+					for(var j = 0; j<20; j++){
+						const wall = new THREE.BoxGeometry( 50, 50, 50 );
+						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const cube = new THREE.Mesh( wall, material );
+						cube.position.set(x,y,z)
+						z=z+50
+						scene.add( cube );
+					}
+					z=-475
+					y=y+50
+				}
+				for(var j = 0; j<20; j++){
+					if(indent%2==0){
+						const wall = new THREE.BoxGeometry( 50, 50, 50 );
+						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const cube = new THREE.Mesh( wall, material );
+						cube.position.set(x,y,z);
+						z=z+50;
+						scene.add( cube );
+						indent+=1;
+					}else{
+						indent+=1;
+						z=z+50
+						continue;
+					}
+						
+				}
+
+
+
+				
+
+
+
+				// roll-over helpers
+
+				const rollOverGeo = new THREE.BoxGeometry( 50, 50, 50 );
+				rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.5, transparent: true } );
+				rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
+				scene.add( rollOverMesh );
+
+				// cubes
+
+				cubeGeo = new THREE.BoxGeometry( 50, 50, 50 );
+				cubeMaterial = new THREE.MeshLambertMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+
+				// grid
+
+				const gridHelper = new THREE.GridHelper( 1000, 20 );
+				scene.add( gridHelper );
+
+				//
+
+				raycaster = new THREE.Raycaster();
+				pointer = new THREE.Vector2();
+
+				const geometry = new THREE.PlaneGeometry( 1000, 1000 );
+				geometry.rotateX( - Math.PI / 2 );
+
+				plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { visible: false } ) );
+				scene.add( plane );
+
+				objects.push( plane );
+
+				// lights
+
+				const ambientLight = new THREE.AmbientLight( 0x606060 );
+				scene.add( ambientLight );
+
+				const directionalLight = new THREE.DirectionalLight( 0xffffff );
+				directionalLight.position.set( 1, 0.75, 0.5 ).normalize();
+				scene.add( directionalLight );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				document.addEventListener( 'pointermove', onPointerMove );
+				document.addEventListener( 'pointerdown', onPointerDown );
+				document.addEventListener( 'keydown', onDocumentKeyDown );
+				document.addEventListener( 'keyup', onDocumentKeyUp );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize );
+				
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				render();
+
+			}
+
+			function onPointerMove( event ) {
+
+				pointer.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
+
+				raycaster.setFromCamera( pointer, camera );
+
+				const intersects = raycaster.intersectObjects( objects, false );
+
+				if ( intersects.length > 0 ) {
+
+					const intersect = intersects[ 0 ];
+
+					rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );
+					rollOverMesh.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
+
+				}
+
+				render();
+
+			}
+
+			function onPointerDown( event ) {
+
+				pointer.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
+
+				raycaster.setFromCamera( pointer, camera );
+
+				const intersects = raycaster.intersectObjects( objects, false );
+
+				if ( intersects.length > 0 ) {
+
+					const intersect = intersects[ 0 ];
+
+					// delete cube
+
+					if ( isShiftDown ) {
+
+						if ( intersect.object !== plane ) {
+
+							scene.remove( intersect.object );
+
+							objects.splice( objects.indexOf( intersect.object ), 1 );
+
+						}
+
+						// create cube
+
+					} else {
+
+						const voxel = new THREE.Mesh( cubeGeo, cubeMaterial );
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+						voxel.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
+						scene.add( voxel );
+
+						objects.push( voxel );
+
+					}
+
+					render();
+
+				}
+
+			}
+
+			function onDocumentKeyDown( event ) {
+
+				switch ( event.keyCode ) {
+
+					case 16: isShiftDown = true; break;
+
+				}
+
+			}
+
+			function onDocumentKeyUp( event ) {
+
+				switch ( event.keyCode ) {
+
+					case 16: isShiftDown = false; break;
+
+				}
+
+			}
+
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
+
+			const controls = new OrbitControls( camera, renderer.domElement );
+				controls.target.set( 0, 12, 0 );
+				controls.update();
+
+
+		</script>
+
+	</body>
+</html>
