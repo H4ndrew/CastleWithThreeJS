@@ -53,7 +53,7 @@
 					x=-500;
 					y=y+50;
 				}
-				let indent = 0;
+				let indent = 1;
 				for(var j = 0; j<20; j++){
 					if(indent%2==0){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
@@ -171,11 +171,42 @@
 						
 				}
 
+				//south west tower
+				x=-475
+				y=50*5/2	
+				z=475
+				const SWtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
+				const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+				const SWcylinder = new THREE.Mesh( SWtower, material );
+				SWcylinder.position.set(x,y,z)
+				scene.add( SWcylinder );
 
-
+				//south east tower
+				x=475
+				y=50*5/2	
+				z=475
+				const SEtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
+				const SEcylinder = new THREE.Mesh( SEtower, material );
+				SEcylinder.position.set(x,y,z)
+				scene.add( SEcylinder );
 				
-
-
+				//north east tower
+				x=475
+				y=50*5/2	
+				z=-475
+				const NEtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
+				const NEcylinder = new THREE.Mesh( NEtower, material );
+				NEcylinder.position.set(x,y,z)
+				scene.add( NEcylinder );
+				
+				//north west tower
+				x=-475
+				y=50*8/2	
+				z=-475
+				const NWtower = new THREE.CylinderGeometry( 50, 110, 50*8, 320 );
+				const NWcylinder = new THREE.Mesh( NWtower, material );
+				NWcylinder.position.set(x,y,z)
+				scene.add( NWcylinder );
 
 				// roll-over helpers
 
