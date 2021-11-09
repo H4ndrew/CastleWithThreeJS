@@ -23,6 +23,9 @@
 			let rollOverMesh, rollOverMaterial;
 			let cubeGeo, cubeMaterial;
 
+			const TextureLoader = new THREE.TextureLoader();
+			const grass = TextureLoader.load( 'textures/grass.jpg' );
+			const brick = TextureLoader.load( '../three.js/examples/textures/brick_bump.jpg' );
 			const objects = [];
 
 			init();
@@ -46,13 +49,13 @@
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
 						if(j>6 && j<14){
 							if(j==7 || j==13){
-							const material = new THREE.MeshBasicMaterial( {color:0xff5f} );
+							const material = new THREE.MeshLambertMaterial( {map: brick} );
 							const cube = new THREE.Mesh( wall, material );
 							cube.position.set(x+25,y,z)
 							scene.add( cube );
 							}
 						}else{
-							const material = new THREE.MeshBasicMaterial( {color:0xff5f5f} );
+							const material = new THREE.MeshLambertMaterial( {map:brick} );
 							const cube = new THREE.Mesh( wall, material );
 							cube.position.set(x+25,y,z)
 							scene.add( cube );
@@ -67,7 +70,7 @@
 					if(indent%2!=0){
 							if(j!=8 && j!=10 && j!= 12){
 								const wall = new THREE.BoxGeometry( 50, 50, 50 );
-								const material = new THREE.MeshBasicMaterial( {color:0x0f5f5f} );
+								const material = new THREE.MeshLambertMaterial( {color:0x0f5f5f} );
 								const cube = new THREE.Mesh( wall, material );
 								cube.position.set(x+25,y,z);
 								x=x+50;
@@ -93,7 +96,7 @@
 				for(var i = 0; i<3; i++){
 					for(var j = 0; j<21; j++){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( {color:0x0255f0} );
+						const material = new THREE.MeshLambertMaterial( {map:brick} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x+25,y,z);
 						x=x+50;
@@ -127,7 +130,7 @@
 				for(var i = 0; i<3; i++){
 					for(var j = 0; j<21; j++){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( {color:0xf0ff5f} );
+						const material = new THREE.MeshLambertMaterial( {map:brick} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x,y,z);
 						z=z+50;
@@ -161,7 +164,7 @@
 				for(var i = 0; i<3; i++){
 					for(var j = 0; j<21; j++){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( {color:0xfa5aaf} );
+						const material = new THREE.MeshLambertMaterial( {map:brick} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x,y,z)
 						z=z+50
@@ -192,7 +195,7 @@
 				y=50*5/2	
 				z=450
 				const SWtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
-				const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+				const material = new THREE.MeshLambertMaterial( { map: brick } );
 				const SWcylinder = new THREE.Mesh( SWtower, material );
 				SWcylinder.position.set(x,y,z)
 				scene.add( SWcylinder );
@@ -238,18 +241,18 @@
 
 				// grid
 
-				const gridHelper = new THREE.GridHelper( 1000, 20 );
-				scene.add( gridHelper );
+				// const gridHelper = new THREE.GridHelper( 1500, 20 );
+				// scene.add( gridHelper );
 
 				//
 
 				raycaster = new THREE.Raycaster();
 				pointer = new THREE.Vector2();
 
-				const geometry = new THREE.PlaneGeometry( 1000, 1000 );
+				const geometry = new THREE.PlaneGeometry( 1500, 1500 );
 				geometry.rotateX( - Math.PI / 2 );
 
-				plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { visible: false } ) );
+				plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { map: grass } ));
 				scene.add( plane );
 
 				objects.push( plane );
