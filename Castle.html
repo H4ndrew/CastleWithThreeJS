@@ -40,29 +40,43 @@
 				//south wall
 				let x = -500;
 				let y = 25;
-				let z = 475;
+				let z = 525;
 				for(var i = 0; i<3; i++){
-					for(var j = 0; j<20; j++){
+					for(var j = 0; j<21; j++){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
-						const cube = new THREE.Mesh( wall, material );
-						cube.position.set(x+25,y,z)
+						if(j>6 && j<14){
+							if(j==7 || j==13){
+							const material = new THREE.MeshBasicMaterial( {color:0xff5f} );
+							const cube = new THREE.Mesh( wall, material );
+							cube.position.set(x+25,y,z)
+							scene.add( cube );
+							}
+						}else{
+							const material = new THREE.MeshBasicMaterial( {color:0xff5f5f} );
+							const cube = new THREE.Mesh( wall, material );
+							cube.position.set(x+25,y,z)
+							scene.add( cube );
+						}
 						x=x+50;
-						scene.add( cube );
 					}
 					x=-500;
 					y=y+50;
 				}
 				let indent = 1;
-				for(var j = 0; j<20; j++){
-					if(indent%2==0){
-						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
-						const cube = new THREE.Mesh( wall, material );
-						cube.position.set(x+25,y,z);
-						x=x+50;
-						scene.add( cube );
-						indent+=1;
+				for(var j = 0; j<21; j++){
+					if(indent%2!=0){
+							if(j!=8 && j!=10 && j!= 12){
+								const wall = new THREE.BoxGeometry( 50, 50, 50 );
+								const material = new THREE.MeshBasicMaterial( {color:0x0f5f5f} );
+								const cube = new THREE.Mesh( wall, material );
+								cube.position.set(x+25,y,z);
+								x=x+50;
+								scene.add( cube );
+								indent+=1;
+							}else{
+								x=x+50;
+								indent+=1;
+							}
 					}else{
 						indent+=1;
 						x=x+50
@@ -75,11 +89,11 @@
 				//north wall
 				x = -500;
 				y = 25;
-				z = -475;
+				z = -575;
 				for(var i = 0; i<3; i++){
-					for(var j = 0; j<20; j++){
+					for(var j = 0; j<21; j++){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const material = new THREE.MeshBasicMaterial( {color:0x0255f0} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x+25,y,z);
 						x=x+50;
@@ -88,10 +102,11 @@
 					x=-500;
 					y=y+50;
 				}
-				for(var j = 0; j<20; j++){
-					if(indent%2==0){
+				indent = 1;
+				for(var j = 0; j<21; j++){
+					if(indent%2!=0){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const material = new THREE.MeshBasicMaterial( {color:0x0f5f5f} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x+25,y,z);
 						x=x+50;
@@ -105,26 +120,27 @@
 				}
 				
 
-				//east wall
+				//west wall
 				x = -475;
 				y = 25;
-				z = -475;
+				z = -525;
 				for(var i = 0; i<3; i++){
-					for(var j = 0; j<20; j++){
+					for(var j = 0; j<21; j++){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const material = new THREE.MeshBasicMaterial( {color:0xf0ff5f} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x,y,z);
 						z=z+50;
 						scene.add( cube );
 					}
-					z=-475;
+					z=-525;
 					y=y+50;
 				}
-				for(var j = 0; j<20; j++){
+				indent = 1;
+				for(var j = 0; j<21; j++){
 					if(indent%2==0){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const material = new THREE.MeshBasicMaterial( {color:0x0f5f5f} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x,y,z);
 						z=z+50;
@@ -138,26 +154,26 @@
 						
 				}
 
-				//west wall
-				x = 475;
+				//east wall
+				x = 525;
 				y = 25;
-				z = -475;
+				z = -525;
 				for(var i = 0; i<3; i++){
-					for(var j = 0; j<20; j++){
+					for(var j = 0; j<21; j++){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const material = new THREE.MeshBasicMaterial( {color:0xfa5aaf} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x,y,z)
 						z=z+50
 						scene.add( cube );
 					}
-					z=-475
+					z=-525
 					y=y+50
 				}
-				for(var j = 0; j<20; j++){
-					if(indent%2==0){
+				for(var j = 0; j<21; j++){
+					if(indent%2!=0){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+						const material = new THREE.MeshBasicMaterial( {color:0x0f5f5f} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x,y,z);
 						z=z+50;
@@ -172,9 +188,9 @@
 				}
 
 				//south west tower
-				x=-475
+				x=-400
 				y=50*5/2	
-				z=475
+				z=450
 				const SWtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
 				const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
 				const SWcylinder = new THREE.Mesh( SWtower, material );
@@ -182,28 +198,28 @@
 				scene.add( SWcylinder );
 
 				//south east tower
-				x=475
+				x=450
 				y=50*5/2	
-				z=475
+				z=450
 				const SEtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
 				const SEcylinder = new THREE.Mesh( SEtower, material );
 				SEcylinder.position.set(x,y,z)
 				scene.add( SEcylinder );
 				
 				//north east tower
-				x=475
+				x=450
 				y=50*5/2	
-				z=-475
+				z=-500
 				const NEtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
 				const NEcylinder = new THREE.Mesh( NEtower, material );
 				NEcylinder.position.set(x,y,z)
 				scene.add( NEcylinder );
 				
 				//north west tower
-				x=-475
-				y=50*8/2	
-				z=-475
-				const NWtower = new THREE.CylinderGeometry( 50, 110, 50*8, 320 );
+				x=-400
+				y=50*5/2	
+				z=-500
+				const NWtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
 				const NWcylinder = new THREE.Mesh( NWtower, material );
 				NWcylinder.position.set(x,y,z)
 				scene.add( NWcylinder );
