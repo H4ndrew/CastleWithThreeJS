@@ -281,19 +281,30 @@
 
 				const geometry = new THREE.PlaneGeometry( 300, 300);
 				geometry.rotateX( -Math.PI / 2 );
-				x=-500
+				x=-550
 				y=0
 				z=-500
 
 				for(var i=0; i<5; i++){
 					for(var j=0; j<5; j++){
-						plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { map: grass } ));
-					plane.position.set(x,y,z);
-					scene.add( plane );
-					x=x+250
+						plane = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { map: grass } ));
+						plane.position.set(x,y,z);
+						if(j%2==0){
+							plane.rotateY( Math.PI / 2);
+						}
+						if(i%2!=0){
+							plane.rotateY( Math.PI / 2);
+						}
+						if(i%2!=0 && j%2!=0){
+							plane.rotateY( Math.PI );
+						}
+						
+						scene.add( plane );
+						x=x+300
 					}
-					x=-500
-					z=z+250
+					
+					x=-550
+					z=z+300
 				}
 				
 				
@@ -305,7 +316,7 @@
 				const ambientLight = new THREE.AmbientLight( 0x606060 );
 				scene.add( ambientLight );
 
-				const directionalLight = new THREE.DirectionalLight( 0xffffff );
+				const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
 				directionalLight.position.set( 1, 0.75, 0.5 ).normalize();
 				scene.add( directionalLight );
 
