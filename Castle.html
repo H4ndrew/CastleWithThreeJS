@@ -72,7 +72,7 @@
 					if(indent%2!=0){
 							if(j!=8 && j!=10 && j!= 12){
 								const wall = new THREE.BoxGeometry( 50, 50, 50 );
-								const material = new THREE.MeshLambertMaterial( {color:0x0f5f5f} );
+								const material = new THREE.MeshLambertMaterial( {map:brick} );
 								const cube = new THREE.Mesh( wall, material );
 								cube.position.set(x+25,y,z);
 								x=x+50;
@@ -111,7 +111,7 @@
 				for(var j = 0; j<21; j++){
 					if(indent%2!=0){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( {color:0x0f5f5f} );
+						const material = new THREE.MeshLambertMaterial( {map:brick} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x+25,y,z);
 						x=x+50;
@@ -145,7 +145,7 @@
 				for(var j = 0; j<21; j++){
 					if(indent%2==0){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( {color:0x0f5f5f} );
+						const material = new THREE.MeshLambertMaterial( {map:brick} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x,y,z);
 						z=z+50;
@@ -178,7 +178,7 @@
 				for(var j = 0; j<21; j++){
 					if(indent%2!=0){
 						const wall = new THREE.BoxGeometry( 50, 50, 50 );
-						const material = new THREE.MeshBasicMaterial( {color:0x0f5f5f} );
+						const material = new THREE.MeshLambertMaterial( {map:brick} );
 						const cube = new THREE.Mesh( wall, material );
 						cube.position.set(x,y,z);
 						z=z+50;
@@ -256,15 +256,15 @@
 
 				// roll-over helpers
 
-				const rollOverGeo = new THREE.BoxGeometry( 50, 50, 50 );
-				rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.5, transparent: true } );
-				rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
-				scene.add( rollOverMesh );
+				// const rollOverGeo = new THREE.BoxGeometry( 50, 50, 50 );
+				// rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.5, transparent: true } );
+				// rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
+				// scene.add( rollOverMesh );
 
 				// cubes
 
-				cubeGeo = new THREE.BoxGeometry( 50, 50, 50 );
-				cubeMaterial = new THREE.MeshLambertMaterial( { map: new THREE.TextureLoader().load( '../three.js/examples/textures/brick_bump.jpg' ) } );
+				// cubeGeo = new THREE.BoxGeometry( 50, 50, 50 );
+				// cubeMaterial = new THREE.MeshLambertMaterial( { map: brick } );
 
 				// grid
 
@@ -276,11 +276,27 @@
 				raycaster = new THREE.Raycaster();
 				pointer = new THREE.Vector2();
 
-				const geometry = new THREE.PlaneGeometry( 1500, 1500 );
-				geometry.rotateX( - Math.PI / 2 );
+				const ground = new THREE.PlaneGeometry( 1500, 1500 );
+				ground.rotateX( - Math.PI / 2 );
 
-				plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { map: grass } ));
-				scene.add( plane );
+				const geometry = new THREE.PlaneGeometry( 300, 300);
+				geometry.rotateX( -Math.PI / 2 );
+				x=-500
+				y=0
+				z=-500
+
+				for(var i=0; i<5; i++){
+					for(var j=0; j<5; j++){
+						plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { map: grass } ));
+					plane.position.set(x,y,z);
+					scene.add( plane );
+					x=x+250
+					}
+					x=-500
+					z=z+250
+				}
+				
+				
 
 				objects.push( plane );
 
