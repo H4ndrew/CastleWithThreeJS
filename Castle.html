@@ -26,6 +26,8 @@
 			const TextureLoader = new THREE.TextureLoader();
 			const grass = TextureLoader.load( 'textures/grass.jpg' );
 			const brick = TextureLoader.load( '../three.js/examples/textures/brick_bump.jpg' );
+			const redbrick = TextureLoader.load('textures/Roof_Tiles_Terracotta_006_basecolor.jpg');
+			const sky = TextureLoader.load('textures/sky.jpg')
 			const objects = [];
 
 			init();
@@ -38,7 +40,7 @@
 				camera.lookAt( 0, 0, 0 );
 
 				scene = new THREE.Scene();
-				scene.background = new THREE.Color( 0xADD8E6 );
+				scene.background = sky;
 				
 				//south wall
 				let x = -500;
@@ -196,9 +198,15 @@
 				z=450
 				const SWtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
 				const material = new THREE.MeshLambertMaterial( { map: brick } );
+				const roof = new THREE.MeshLambertMaterial( {map: redbrick} );
 				const SWcylinder = new THREE.Mesh( SWtower, material );
-				SWcylinder.position.set(x,y,z)
+				SWcylinder.position.set(x,y,z);
 				scene.add( SWcylinder );
+				y=y+225
+				const SWcone = new THREE.ConeGeometry( 80, 200, 320 );
+				const SWroof = new THREE.Mesh( SWcone, roof );
+				SWroof.position.set(x,y,z);
+				scene.add( SWroof );
 
 				//south east tower
 				x=450
@@ -206,8 +214,13 @@
 				z=450
 				const SEtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
 				const SEcylinder = new THREE.Mesh( SEtower, material );
-				SEcylinder.position.set(x,y,z)
+				SEcylinder.position.set(x,y,z);
 				scene.add( SEcylinder );
+				y=y+225
+				const SEcone = new THREE.ConeGeometry( 80, 200, 320 );
+				const SEroof = new THREE.Mesh( SEcone, roof );
+				SEroof.position.set(x,y,z);
+				scene.add( SEroof );
 				
 				//north east tower
 				x=450
@@ -215,8 +228,13 @@
 				z=-500
 				const NEtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
 				const NEcylinder = new THREE.Mesh( NEtower, material );
-				NEcylinder.position.set(x,y,z)
+				NEcylinder.position.set(x,y,z);
 				scene.add( NEcylinder );
+				y=y+225
+				const NEcone = new THREE.ConeGeometry( 80, 200, 320 );
+				const NEroof = new THREE.Mesh( NEcone, roof );
+				NEroof.position.set(x,y,z);
+				scene.add( NEroof );
 				
 				//north west tower
 				x=-400
@@ -224,8 +242,17 @@
 				z=-500
 				const NWtower = new THREE.CylinderGeometry( 50, 50, 50*5, 320 );
 				const NWcylinder = new THREE.Mesh( NWtower, material );
-				NWcylinder.position.set(x,y,z)
+				NWcylinder.position.set(x,y,z);
 				scene.add( NWcylinder );
+				y=y+225
+				const NWcone = new THREE.ConeGeometry( 80, 200, 320 );
+				const NWroof = new THREE.Mesh( NWcone, roof );
+				NWroof.position.set(x,y,z);
+				scene.add( NWroof );
+
+				//central piece
+				
+
 
 				// roll-over helpers
 
