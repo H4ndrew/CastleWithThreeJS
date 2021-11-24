@@ -23,19 +23,24 @@
 		let cubeGeo, cubeMaterial;
 
 		const TextureLoader = new THREE.TextureLoader();
+
 		const grass = TextureLoader.load('textures/grass.jpg');
 		const brick = TextureLoader.load('../three.js/examples/textures/brick_bump.jpg');
 		const redbrick = TextureLoader.load('textures/Roof_Tiles_Terracotta_006_basecolor.jpg');
 		const sky = TextureLoader.load('textures/sky.jpg')
+
 		const tiles = new THREE.MeshLambertMaterial({ map: redbrick });
 		const material = new THREE.MeshLambertMaterial({ map: brick });
+
 		const objects = [];
+
+		let x, y, z;
 
 		init();
 		render();
 
 		function init() {
-			camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+			camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000);
 			camera.position.set(500, 800, 1300);
 			camera.lookAt(0, 0, 0);
 
@@ -43,10 +48,10 @@
 			scene.background = sky;
 
 			//south wall
-			let x = -500;
-			let y = 25;
-			let z = 525;
-			createWall(x, y, z, south);
+			x = -500;
+			y = 25;
+			z = 525;
+			createWall(x, y, z, "south");
 
 			//north wall
 			x = -500;
@@ -67,95 +72,32 @@
 			createWall(x, y, z, "east");
 
 			//south west tower
-			x = -400
-			y = 50 * 5 / 2
-			z = 450
+			x = -400;
+			y = 50 * 5 / 2;
+			z = 450;
 			createTower(x, y, z);
 
 			//south east tower
-			x = 450
-			y = 50 * 5 / 2
-			z = 450
+			x = 450;
+			y = 50 * 5 / 2;
+			z = 450;
 			createTower(x, y, z);
 
 			//north east tower
-			x = 450
-			y = 50 * 5 / 2
-			z = -500
+			x = 450;
+			y = 50 * 5 / 2;
+			z = -500;
 			createTower(x, y, z);
 
 			//north west tower
-			x = -400
-			y = 50 * 5 / 2
-			z = -500
+			x = -400;
+			y = 50 * 5 / 2;
+			z = -500;
 			createTower(x, y, z);
 
 			//central piece
-			// var buildingWidth, buildingHeight, buildingDepth
-
-			// var building = new THREE.Mesh(new THREE.CubeGeometry(buildingWidth, buildingHeight, buildingDepth), brick);
-			// building.castShadow = true;
-
-			// var frontUpperBuildingPart = createUpperPart();
-			// var backUpperBuildingPart = createUpperPart();
-
-			// frontUpperBuildingPart.position.set(0, buildingHeight / 2, buildingDepth / 2);
-			// building.add(frontUpperBuildingPart);
-
-			// backUpperBuildingPart.rotation.y = Math.PI;
-			// backUpperBuildingPart.position.set(0, buildingHeight / 2, -buildingDepth / 2);
-			// building.add(backUpperBuildingPart);
-
-			// var rightRoof = createRoof();
-			// var leftRoof = createRoof();
-
-			// rightRoof.position.set(0, buildingHeight, 0);
-			// rightRoof.position.y = buildingHeight / 2;
-			// building.add(rightRoof);
-
-			// leftRoof.rotation.y = Math.PI;
-			// leftRoof.position.y = buildingHeight / 2;
-			// building.add(leftRoof);
-
-			// roofGeometry.vertices.push(new THREE.Vector3(buildingWidth / 2, 0, -buildingDepth / 2));
-			// roofGeometry.vertices.push(new THREE.Vector3(0, roofHeight, -buildingDepth / 2));
-			// roofGeometry.vertices.push(new THREE.Vector3(buildingWidth / 2, 0, buildingDepth / 2));
-			// roofGeometry.vertices.push(new THREE.Vector3(0, roofHeight, buildingDepth / 2));
-
-			// roofGeometry.faces.push(new THREE.Face3(0, 1, 2));
-			// roofGeometry.faces.push(new THREE.Face3(3, 2, 1));
-			// roofGeometry.computeFaceNormals();
-
-			// for (x = -buildingWidth / 2 + windowMargin; x < buildingWidth / 2 - windowMargin; x += windowMargin) {
-			// 	wind = createWindow(windowXRadius, windowYRadius, windowMaterial);
-			// 	wind.position.set(x, windowY, buildingDepth / 2 + 0.2);
-			// 	building.add(wind);
-			// }
-
-			// wind = createWindow(8, 24, windowMaterial);
-			// wind.position.set(0, 26, buildingDepth / 2 + 0.2);
-			// building.add(wind);
 
 
-
-			// roll-over helpers
-
-			// const rollOverGeo = new THREE.BoxGeometry( 50, 50, 50 );
-			// rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.5, transparent: true } );
-			// rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
-			// scene.add( rollOverMesh );
-
-			// cubes
-
-			// cubeGeo = new THREE.BoxGeometry( 50, 50, 50 );
-			// cubeMaterial = new THREE.MeshLambertMaterial( { map: brick } );
-
-			// grid
-
-			// const gridHelper = new THREE.GridHelper( 1500, 20 );
-			// scene.add( gridHelper );
-
-			//
 
 			raycaster = new THREE.Raycaster();
 			pointer = new THREE.Vector2();
@@ -165,9 +107,9 @@
 
 			const geometry = new THREE.PlaneGeometry(300, 300);
 			geometry.rotateX(-Math.PI / 2);
-			x = -550
-			y = 0
-			z = -500
+			x = -550;
+			y = 0;
+			z = -500;
 
 			for (var i = 0; i < 5; i++) {
 				for (var j = 0; j < 5; j++) {
@@ -191,12 +133,9 @@
 				z = z + 300
 			}
 
-
-
 			objects.push(plane);
 
 			// lights
-
 			const ambientLight = new THREE.AmbientLight(0x606060);
 			scene.add(ambientLight);
 
@@ -207,42 +146,15 @@
 			renderer = new THREE.WebGLRenderer({ antialias: true });
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
+
 			document.body.appendChild(renderer.domElement);
-
 			document.addEventListener('pointermove', onPointerMove);
-			document.addEventListener('pointerdown', onPointerDown);
-			document.addEventListener('keydown', onDocumentKeyDown);
-			document.addEventListener('keyup', onDocumentKeyUp);
-
-			//
 
 			window.addEventListener('resize', onWindowResize);
-
 		}
-		//Central
-		// function createUpperPart() {
-		// 	var upperPartGeometry = new THREE.Geometry();
-		// 	upperPartGeometry.vertices.push(new THREE.Vector3(-buildingWidth / 2, 0, 0));
-		// 	upperPartGeometry.vertices.push(new THREE.Vector3(buildingWidth / 2, 0, 0));
-		// 	upperPartGeometry.vertices.push(new THREE.Vector3(0, roofHeight, 0));
-
-		// 	upperPartGeometry.faces.push(new THREE.Face3(0, 1, 2));
-		// 	upperPartGeometry.computeFaceNormals();
-
-		// 	var upperPart = new THREE.Mesh(upperPartGeometry, wallMaterial);
-		// 	upperPart.castShadow = true;
-
-		// 	return upperPart;
-		// }
-
-		// function createWindow(xRadius, yRadius, material) {
-		// 	var ellipse = new THREE.EllipseCurve(0, 0, xRadius, yRadius, 0, Math.PI);
-		// 	var ellipsePath = new THREE.Path(ellipse.getPoints(50));
-		// 	var windowGeometry = new THREE.ShapeGeometry(ellipsePath.toShapes()[0]);
-		// 	return new THREE.Mesh(windowGeometry, material);
-		// }
 
 		function createWall(x, y, z, side) {
+			let indent;
 			switch (side) {
 				case 'north':
 					for (var i = 0; i < 3; i++) {
@@ -314,6 +226,7 @@
 						z = -525
 						y = y + 50
 					}
+					indent = 0;
 					for (var j = 0; j < 21; j++) {
 						if (indent % 2 != 0) {
 							const wall = new THREE.BoxGeometry(50, 50, 50);
@@ -350,7 +263,7 @@
 						x = -500;
 						y = y + 50;
 					}
-					let indent = 1;
+					indent = 1;
 					for (var j = 0; j < 21; j++) {
 						if (indent % 2 != 0) {
 							if (j != 8 && j != 10 && j != 12) {
@@ -403,49 +316,7 @@
 		function onPointerMove(event) {
 			pointer.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
 			raycaster.setFromCamera(pointer, camera);
-			const intersects = raycaster.intersectObjects(objects, false);
-			if (intersects.length > 0) {
-				const intersect = intersects[0];
-				rollOverMesh.position.copy(intersect.point).add(intersect.face.normal);
-				rollOverMesh.position.divideScalar(50).floor().multiplyScalar(50).addScalar(25);
-			}
 			render();
-		}
-
-		function onPointerDown(event) {
-			pointer.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
-			raycaster.setFromCamera(pointer, camera);
-			const intersects = raycaster.intersectObjects(objects, false);
-			if (intersects.length > 0) {
-				const intersect = intersects[0];
-				// delete cube
-				if (isShiftDown) {
-					if (intersect.object !== plane) {
-						scene.remove(intersect.object);
-						objects.splice(objects.indexOf(intersect.object), 1);
-					}
-					// create cube
-				} else {
-					const voxel = new THREE.Mesh(cubeGeo, cubeMaterial);
-					voxel.position.copy(intersect.point).add(intersect.face.normal);
-					voxel.position.divideScalar(50).floor().multiplyScalar(50).addScalar(25);
-					scene.add(voxel);
-					objects.push(voxel);
-				}
-				render();
-			}
-		}
-
-		function onDocumentKeyDown(event) {
-			switch (event.keyCode) {
-				case 16: isShiftDown = true; break;
-			}
-		}
-
-		function onDocumentKeyUp(event) {
-			switch (event.keyCode) {
-				case 16: isShiftDown = false; break;
-			}
 		}
 
 		function render() {
