@@ -46,242 +46,25 @@
 			let x = -500;
 			let y = 25;
 			let z = 525;
-
-			// createWall(x, y, z, south);
-			for (var i = 0; i < 3; i++) {
-				for (var j = 0; j < 21; j++) {
-					const wall = new THREE.BoxGeometry(50, 50, 50);
-					if (j > 6 && j < 14) {
-						if (j == 7 || j == 13) {
-							const cube = new THREE.Mesh(wall, material);
-							cube.position.set(x + 25, y, z)
-							scene.add(cube);
-						}
-					} else {
-						const cube = new THREE.Mesh(wall, material);
-						cube.position.set(x + 25, y, z)
-						scene.add(cube);
-					}
-					x = x + 50;
-				}
-				x = -500;
-				y = y + 50;
-			}
-			let indent = 1;
-			for (var j = 0; j < 21; j++) {
-				if (indent % 2 != 0) {
-					if (j != 8 && j != 10 && j != 12) {
-						const wall = new THREE.BoxGeometry(50, 50, 50);
-						const cube = new THREE.Mesh(wall, material);
-						cube.position.set(x + 25, y, z);
-						x = x + 50;
-						scene.add(cube);
-						indent += 1;
-					} else {
-						x = x + 50;
-						indent += 1;
-					}
-				} else {
-					indent += 1;
-					x = x + 50
-					continue;
-				}
-			}
+			createWall(x, y, z, south);
 
 			//north wall
 			x = -500;
 			y = 25;
 			z = -575;
-
 			createWall(x, y, z, "north");
-
-			// for (var i = 0; i < 3; i++) {
-			// 	for (var j = 0; j < 21; j++) {
-			// 		const wall = new THREE.BoxGeometry(50, 50, 50);
-			// 		const cube = new THREE.Mesh(wall, material);
-			// 		cube.position.set(x + 25, y, z);
-			// 		x = x + 50;
-			// 		scene.add(cube);
-			// 	}
-			// 	x = -500;
-			// 	y = y + 50;
-			// }
-			// indent = 1;
-			// for (var j = 0; j < 21; j++) {
-			// 	if (indent % 2 != 0) {
-			// 		const wall = new THREE.BoxGeometry(50, 50, 50);
-			// 		const material = new THREE.MeshLambertMaterial({ map: brick });
-			// 		const cube = new THREE.Mesh(wall, material);
-			// 		cube.position.set(x + 25, y, z);
-			// 		x = x + 50;
-			// 		scene.add(cube);
-			// 		indent += 1;
-			// 	} else {
-			// 		indent += 1;
-			// 		x = x + 50
-			// 		continue;
-			// 	}
-			// }
-
-			function createWall(x, y, z, side) {
-				switch (side) {
-					case 'north':
-						for (var i = 0; i < 3; i++) {
-							for (var j = 0; j < 21; j++) {
-								const wall = new THREE.BoxGeometry(50, 50, 50);
-								const cube = new THREE.Mesh(wall, material);
-								cube.position.set(x + 25, y, z);
-								x = x + 50;
-								scene.add(cube);
-							}
-							x = -500;
-							y = y + 50;
-						}
-						indent = 1;
-						for (var j = 0; j < 21; j++) {
-							if (indent % 2 != 0) {
-								const wall = new THREE.BoxGeometry(50, 50, 50);
-								const cube = new THREE.Mesh(wall, material);
-								cube.position.set(x + 25, y, z);
-								x = x + 50;
-								scene.add(cube);
-								indent += 1;
-							} else {
-								indent += 1;
-								x = x + 50
-								continue;
-							}
-						}
-						break;
-
-					case 'west':
-						for (var i = 0; i < 3; i++) {
-							for (var j = 0; j < 21; j++) {
-								const wall = new THREE.BoxGeometry(50, 50, 50);
-								const cube = new THREE.Mesh(wall, material);
-								cube.position.set(x, y, z);
-								z = z + 50;
-								scene.add(cube);
-							}
-							z = -525;
-							y = y + 50;
-						}
-						indent = 1;
-						for (var j = 0; j < 21; j++) {
-							if (indent % 2 == 0) {
-								const wall = new THREE.BoxGeometry(50, 50, 50);
-								const cube = new THREE.Mesh(wall, material);
-								cube.position.set(x, y, z);
-								z = z + 50;
-								scene.add(cube);
-								indent += 1;
-							} else {
-								indent += 1;
-								z = z + 50
-								continue;
-							}
-						}
-						break;
-
-					case 'east':
-						for (var i = 0; i < 3; i++) {
-							for (var j = 0; j < 21; j++) {
-								const wall = new THREE.BoxGeometry(50, 50, 50);
-								const cube = new THREE.Mesh(wall, material);
-								cube.position.set(x, y, z)
-								z = z + 50
-								scene.add(cube);
-							}
-							z = -525
-							y = y + 50
-						}
-						for (var j = 0; j < 21; j++) {
-							if (indent % 2 != 0) {
-								const wall = new THREE.BoxGeometry(50, 50, 50);
-								const cube = new THREE.Mesh(wall, material);
-								cube.position.set(x, y, z);
-								z = z + 50;
-								scene.add(cube);
-								indent += 1;
-							} else {
-								indent += 1;
-								z = z + 50
-								continue;
-							}
-						}
-						break;
-
-					case 'south':
-						break;
-					default:
-						console.log("side not recognized")
-				}
-
-			}
 
 			//west wall
 			x = -475;
 			y = 25;
 			z = -525;
-
 			createWall(x, y, z, "west");
-			// for (var i = 0; i < 3; i++) {
-			// 	for (var j = 0; j < 21; j++) {
-			// 		const wall = new THREE.BoxGeometry(50, 50, 50);
-			// 		const cube = new THREE.Mesh(wall, material);
-			// 		cube.position.set(x, y, z);
-			// 		z = z + 50;
-			// 		scene.add(cube);
-			// 	}
-			// 	z = -525;
-			// 	y = y + 50;
-			// }
-			// indent = 1;
-			// for (var j = 0; j < 21; j++) {
-			// 	if (indent % 2 == 0) {
-			// 		const wall = new THREE.BoxGeometry(50, 50, 50);
-			// 		const cube = new THREE.Mesh(wall, material);
-			// 		cube.position.set(x, y, z);
-			// 		z = z + 50;
-			// 		scene.add(cube);
-			// 		indent += 1;
-			// 	} else {
-			// 		indent += 1;
-			// 		z = z + 50
-			// 		continue;
-			// 	}
-			// }
 
 			//east wall
 			x = 525;
 			y = 25;
 			z = -525;
 			createWall(x, y, z, "east");
-			// for (var i = 0; i < 3; i++) {
-			// 	for (var j = 0; j < 21; j++) {
-			// 		const wall = new THREE.BoxGeometry(50, 50, 50);
-			// 		const cube = new THREE.Mesh(wall, material);
-			// 		cube.position.set(x, y, z)
-			// 		z = z + 50
-			// 		scene.add(cube);
-			// 	}
-			// 	z = -525
-			// 	y = y + 50
-			// }
-			// for (var j = 0; j < 21; j++) {
-			// 	if (indent % 2 != 0) {
-			// 		const wall = new THREE.BoxGeometry(50, 50, 50);
-			// 		const cube = new THREE.Mesh(wall, material);
-			// 		cube.position.set(x, y, z);
-			// 		z = z + 50;
-			// 		scene.add(cube);
-			// 		indent += 1;
-			// 	} else {
-			// 		indent += 1;
-			// 		z = z + 50
-			// 		continue;
-			// 	}
-			// }
 
 			//south west tower
 			x = -400
@@ -459,7 +242,140 @@
 		// 	return new THREE.Mesh(windowGeometry, material);
 		// }
 
+		function createWall(x, y, z, side) {
+			switch (side) {
+				case 'north':
+					for (var i = 0; i < 3; i++) {
+						for (var j = 0; j < 21; j++) {
+							const wall = new THREE.BoxGeometry(50, 50, 50);
+							const cube = new THREE.Mesh(wall, material);
+							cube.position.set(x + 25, y, z);
+							x = x + 50;
+							scene.add(cube);
+						}
+						x = -500;
+						y = y + 50;
+					}
+					indent = 1;
+					for (var j = 0; j < 21; j++) {
+						if (indent % 2 != 0) {
+							const wall = new THREE.BoxGeometry(50, 50, 50);
+							const cube = new THREE.Mesh(wall, material);
+							cube.position.set(x + 25, y, z);
+							x = x + 50;
+							scene.add(cube);
+							indent += 1;
+						} else {
+							indent += 1;
+							x = x + 50
+							continue;
+						}
+					}
+					break;
 
+				case 'west':
+					for (var i = 0; i < 3; i++) {
+						for (var j = 0; j < 21; j++) {
+							const wall = new THREE.BoxGeometry(50, 50, 50);
+							const cube = new THREE.Mesh(wall, material);
+							cube.position.set(x, y, z);
+							z = z + 50;
+							scene.add(cube);
+						}
+						z = -525;
+						y = y + 50;
+					}
+					indent = 1;
+					for (var j = 0; j < 21; j++) {
+						if (indent % 2 == 0) {
+							const wall = new THREE.BoxGeometry(50, 50, 50);
+							const cube = new THREE.Mesh(wall, material);
+							cube.position.set(x, y, z);
+							z = z + 50;
+							scene.add(cube);
+							indent += 1;
+						} else {
+							indent += 1;
+							z = z + 50
+							continue;
+						}
+					}
+					break;
+
+				case 'east':
+					for (var i = 0; i < 3; i++) {
+						for (var j = 0; j < 21; j++) {
+							const wall = new THREE.BoxGeometry(50, 50, 50);
+							const cube = new THREE.Mesh(wall, material);
+							cube.position.set(x, y, z)
+							z = z + 50
+							scene.add(cube);
+						}
+						z = -525
+						y = y + 50
+					}
+					for (var j = 0; j < 21; j++) {
+						if (indent % 2 != 0) {
+							const wall = new THREE.BoxGeometry(50, 50, 50);
+							const cube = new THREE.Mesh(wall, material);
+							cube.position.set(x, y, z);
+							z = z + 50;
+							scene.add(cube);
+							indent += 1;
+						} else {
+							indent += 1;
+							z = z + 50
+							continue;
+						}
+					}
+					break;
+
+				case 'south':
+					for (var i = 0; i < 3; i++) {
+						for (var j = 0; j < 21; j++) {
+							const wall = new THREE.BoxGeometry(50, 50, 50);
+							if (j > 6 && j < 14) {
+								if (j == 7 || j == 13) {
+									const cube = new THREE.Mesh(wall, material);
+									cube.position.set(x + 25, y, z)
+									scene.add(cube);
+								}
+							} else {
+								const cube = new THREE.Mesh(wall, material);
+								cube.position.set(x + 25, y, z)
+								scene.add(cube);
+							}
+							x = x + 50;
+						}
+						x = -500;
+						y = y + 50;
+					}
+					let indent = 1;
+					for (var j = 0; j < 21; j++) {
+						if (indent % 2 != 0) {
+							if (j != 8 && j != 10 && j != 12) {
+								const wall = new THREE.BoxGeometry(50, 50, 50);
+								const cube = new THREE.Mesh(wall, material);
+								cube.position.set(x + 25, y, z);
+								x = x + 50;
+								scene.add(cube);
+								indent += 1;
+							} else {
+								x = x + 50;
+								indent += 1;
+							}
+						} else {
+							indent += 1;
+							x = x + 50
+							continue;
+						}
+					}
+					break;
+
+				default:
+					console.log("side not recognized")
+			}
+		}
 
 		function createTower(x, y, z) {
 			const tower = new THREE.CylinderGeometry(50, 50, 50 * 5, 320);
