@@ -18,8 +18,7 @@
 
 		let camera, scene, renderer;
 		let plane, road, door, gate, castleWindow;
-		let pointer, raycaster, isShiftDown = false;
-		let rollOverMesh, rollOverMaterial;
+		let pointer, raycaster;
 		let cubeGeo, cubeMaterial;
 
 		const TextureLoader = new THREE.TextureLoader();
@@ -146,6 +145,7 @@
 			z = 150;
 			createWall(x, y, z, "south", 6, 11, "no");
 
+			//central pyramidal roof
 			x = 25;
 			y = 625;
 			z = 0;
@@ -166,9 +166,9 @@
 			y = 0;
 			z = -600;
 
-			const gridHelper = new THREE.GridHelper(1500, 25);
-			gridHelper.position.set(0, 0, 0);
-			scene.add(gridHelper);
+			// const gridHelper = new THREE.GridHelper(1500, 25);
+			// gridHelper.position.set(0, 0, 0);
+			// scene.add(gridHelper);
 
 			for (var i = 0; i < 5; i++) {
 				for (var j = 0; j < 5; j++) {
@@ -185,11 +185,11 @@
 					}
 
 					scene.add(plane);
-					x = x + 300
+					x = x + 300;
 				}
 
-				x = -600
-				z = z + 300
+				x = -600;
+				z = z + 300;
 			}
 			objects.push(plane);
 
