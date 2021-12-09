@@ -16,12 +16,15 @@
 		import { OrbitControls } from '../three.js/examples/jsm/controls/OrbitControls.js';
 		import { CameraControls } from '../three.js/examples/jsm/controls/experimental/CameraControls.js';
 		import { GUI } from '../three.js/examples/jsm/libs/dat.gui.module.js';
+		import { Sky } from "../three.js/examples/jsm/objects/Sky.js"
+		import { FBXLoader } from '../three.js/examples/jsm/loaders/FBXLoader.js';
+		import Stats from '../three.js/examples/jsm/libs/stats.module.js';
 
 		let camera, scene, renderer;
 		let plane, road, door, gate, castleWindow, court;
 		let pointer, raycaster, spotLight;
 		let cubeGeo, cubeMaterial;
-		let gui;
+		let gui, sun;
 
 		const TextureLoader = new THREE.TextureLoader();
 
@@ -220,9 +223,9 @@
 
 			const doorGeo = new THREE.PlaneGeometry(200, 200);
 			x = 25;
-			y = 100;
+			y = 85;
 			z = 176;
-			door = new THREE.Mesh(doorGeo, new THREE.MeshPhongMaterial({ map: woodenDoor }));
+			door = new THREE.Mesh(doorGeo, new THREE.MeshPhongMaterial({ map: woodenDoor, transparent: true }));
 			door.position.set(x, y, z);
 			scene.add(door);
 
@@ -239,7 +242,6 @@
 			// gate.position.set(x, y + 50, z + 350);
 			// scene.add(gate);
 
-
 			createWindow(x, y + 300, z, 200, 200, "south");
 			createWindow(x, y + 300, z - 352, 200, 200, "north");
 			createWindow(x + 181, y + 300, z - 172, 200, 200, "east");
@@ -251,33 +253,21 @@
 
 			spotLight = new THREE.SpotLight(0xffffff, 0.5);
 			spotLight.position.set(-1000, 1500, 1000);
+			spotLight.distance = 0;
+			spotLight.angle = Math.PI / 5;
 			spotLight.castShadow = true;
 			spotLight.shadow.mapSize.width = 512;
 			spotLight.shadow.mapSize.height = 512;
-			spotLight.shadow.camera.near = 10;
-			spotLight.shadow.camera.far = 200;
+			spotLight.shadow.camera.near = 100;
+			spotLight.shadow.camera.far = 2000;
 			spotLight.shadow.focus = 1;
 			scene.add(spotLight);
 
+			// var lightHelper = new THREE.SpotLightHelper(spotLight, 5);
+			// scene.add(lightHelper);
 
-			var spotLight2 = new THREE.SpotLight(0xadd8e6, 1);
-			spotLight2.position.set(0, 1500, 1000);
-			spotLight2.castShadow = true;
-			spotLight2.shadow.mapSize.width = 512;
-			spotLight2.shadow.mapSize.height = 512;
-			spotLight2.shadow.camera.near = 10;
-			spotLight2.shadow.camera.far = 200;
-			spotLight2.shadow.focus = 1;
-			scene.add(spotLight2);
-
-			var lightHelper = new THREE.SpotLightHelper(spotLight, 5);
-			scene.add(lightHelper);
-
-			var lightHelper2 = new THREE.SpotLightHelper(spotLight2, 5);
-			scene.add(lightHelper2);
-
-			var shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
-			scene.add(shadowCameraHelper);
+			// var shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
+			// scene.add(shadowCameraHelper);
 
 
 			renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -300,62 +290,62 @@
 			const params = {
 				'light color': spotLight.color.getHex(),
 				intensity: spotLight.intensity,
-				distance: spotLight.distance,
-				angle: spotLight.angle,
-				penumbra: spotLight.penumbra,
-				decay: spotLight.decay,
-				focus: spotLight.shadow.focus
 			};
 
 			gui.addColor(params, 'light color').onChange(function (val) {
-
 				spotLight.color.setHex(val);
 				render();
-
 			});
+
+			gui.add(spotLight.position, "x", "y", "z", 10);
 
 			gui.add(params, 'intensity', 0, 2).onChange(function (val) {
-
 				spotLight.intensity = val;
 				render();
-
 			});
 
 
-			gui.add(params, 'distance', 50, 200).onChange(function (val) {
+			// gui.add(params, 'distance', 0, 1500).onChange(function (val) {
 
-				spotLight.distance = val;
-				render();
+			// 	spotLight.position.set(-1000, val, 1000);
+			// 	render();
 
-			});
+			// });
 
-			gui.add(params, 'angle', 0, Math.PI / 3).onChange(function (val) {
+			// gui.add(params, 'angle', 0, Math.PI / 3).onChange(function (val) {
 
-				spotLight.angle = val;
-				render();
+			// 	spotLight.angle = val;
+			// 	render();
 
-			});
+			// });
 
-			gui.add(params, 'penumbra', 0, 1).onChange(function (val) {
+			// gui.add(params, 'penumbra', 0, 1).onChange(function (val) {
 
-				spotLight.penumbra = val;
-				render();
+			// 	spotLight.penumbra = val;
+			// 	render();
 
-			});
+			// });
 
-			gui.add(params, 'decay', 1, 2).onChange(function (val) {
+			// gui.add(params, 'decay', 1, 2).onChange(function (val) {
 
-				spotLight.decay = val;
-				render();
+			// 	spotLight.decay = val;
+			// 	render();
 
-			});
+			// });
 
-			gui.add(params, 'focus', 0, 1).onChange(function (val) {
+			// gui.add(params, 'focus', 0, 1).onChange(function (val) {
 
-				spotLight.shadow.focus = val;
-				render();
+			// 	spotLight.shadow.focus = val;
+			// 	render();
 
-			});
+			// });
+
+			// gui.add(params, 'position', 0, 1500).onChange(function (val) {
+
+			// 	spotLight.position.set(val, val, val);
+			// 	render();
+
+			// });
 
 			gui.open();
 
@@ -600,6 +590,20 @@
 		// 	this.zoomStart += (zoomEnd - this.zoomStart) * this.zoomDampingFactor;
 
 		// };
+
+		function animate() {
+
+			requestAnimationFrame(animate);
+
+			const delta = clock.getDelta();
+
+			if (mixer) mixer.update(delta);
+
+			renderer.render(scene, camera);
+
+			stats.update();
+
+		}
 		const controls = new OrbitControls(camera, renderer.domElement);
 		controls.target.set(0, 12, 0);
 		// controls.constraint.smoothZoom = true;
