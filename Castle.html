@@ -45,6 +45,9 @@
 		const material = new THREE.MeshPhongMaterial({ map: brick });
 		const guardGate = new THREE.MeshPhongMaterial({ map: guardGateTexture, transparent: true });
 
+		const stats = Stats()
+		document.body.appendChild(stats.dom)
+
 		const objects = [];
 
 		let x, y, z;
@@ -533,11 +536,18 @@
 
 		function render() {
 			renderer.render(scene, camera);
+			stats.update();
 		}
 
 		const controls = new OrbitControls(camera, renderer.domElement);
 		controls.target.set(0, 12, 0);
 		controls.update();
+
+		stats = new Stats();
+		container.appendChild(stats.dom);
+
+
+
 
 
 		class BasicCharacterControls {
