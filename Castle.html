@@ -18,6 +18,7 @@
 		import { GUI } from '../three.js/examples/jsm/libs/dat.gui.module.js';
 		import { Sky } from "../three.js/examples/jsm/objects/Sky.js"
 		import { FBXLoader } from '../three.js/examples/jsm/loaders/FBXLoader.js';
+		import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
 		import Stats from '../three.js/examples/jsm/libs/stats.module.js';
 
 		let camera, scene, renderer;
@@ -37,7 +38,9 @@
 		const guardGateTexture = TextureLoader.load('textures/gate.png');
 		const windowTexture = TextureLoader.load('textures/window.png');
 		const courtTexture = TextureLoader.load('textures/stone.png');
+		const woodenBox = TextureLoader.load('textures/woodenBox.jpg');
 
+		const wBox = new THREE.MeshPhongMaterial({ map: woodenBox });
 		const tiles = new THREE.MeshPhongMaterial({ map: redbrick });
 		const material = new THREE.MeshPhongMaterial({ map: brick });
 		const guardGate = new THREE.MeshPhongMaterial({ map: guardGateTexture, transparent: true });
@@ -200,14 +203,6 @@
 			}
 			objects.push(plane);
 
-
-			// const courtGeo = new THREE.PlaneGeometry(250, 300);
-			// court = new THREE.Mesh(courtGeo, new THREE.MeshPhongMaterial({ map: courtTexture }));
-			// court.position.set(-175, 3, -100);
-			// courtGeo.rotateX(-Math.PI / 2);
-			// scene.add(court);
-
-
 			const roadGeo = new THREE.PlaneGeometry(250, 300);
 			roadGeo.rotateX(-Math.PI / 2);
 			x = 25;
@@ -228,19 +223,6 @@
 			door = new THREE.Mesh(doorGeo, new THREE.MeshPhongMaterial({ map: woodenDoor, transparent: true }));
 			door.position.set(x, y, z);
 			scene.add(door);
-
-			// const gateGeo = new THREE.BoxGeometry(300, 300, 50);
-			// const gateFrame = [
-			// 	material,
-			// 	material,
-			// 	material,
-			// 	material,
-			// 	guardGate,
-			// 	guardGate
-			// ]
-			// gate = new THREE.Mesh(gateGeo, gateFrame);
-			// gate.position.set(x, y + 50, z + 350);
-			// scene.add(gate);
 
 			createWindow(x, y + 300, z, 200, 200, "south");
 			createWindow(x, y + 300, z - 352, 200, 200, "north");
@@ -303,49 +285,6 @@
 				spotLight.intensity = val;
 				render();
 			});
-
-
-			// gui.add(params, 'distance', 0, 1500).onChange(function (val) {
-
-			// 	spotLight.position.set(-1000, val, 1000);
-			// 	render();
-
-			// });
-
-			// gui.add(params, 'angle', 0, Math.PI / 3).onChange(function (val) {
-
-			// 	spotLight.angle = val;
-			// 	render();
-
-			// });
-
-			// gui.add(params, 'penumbra', 0, 1).onChange(function (val) {
-
-			// 	spotLight.penumbra = val;
-			// 	render();
-
-			// });
-
-			// gui.add(params, 'decay', 1, 2).onChange(function (val) {
-
-			// 	spotLight.decay = val;
-			// 	render();
-
-			// });
-
-			// gui.add(params, 'focus', 0, 1).onChange(function (val) {
-
-			// 	spotLight.shadow.focus = val;
-			// 	render();
-
-			// });
-
-			// gui.add(params, 'position', 0, 1500).onChange(function (val) {
-
-			// 	spotLight.position.set(val, val, val);
-			// 	render();
-
-			// });
 
 			gui.open();
 
@@ -575,42 +514,209 @@
 			renderer.render(scene, camera);
 		}
 
-		// var zoomEnd = 0;
-		// this.zoomStart = 0;
-
-		// this.zoomDampingFactor = 0.2; //0.3
-		// this.smoothZoomSpeed = 5.0;
-		// this.smoothZoom = false;
-
-		// this.smoothZoomUpdate = function () {
-
-		// 	var factor = 1.0 + (zoomEnd - this.zoomStart) * this.smoothZoomSpeed;
-		// 	scale *= factor;
-
-		// 	this.zoomStart += (zoomEnd - this.zoomStart) * this.zoomDampingFactor;
-
-		// };
-
-		function animate() {
-
-			requestAnimationFrame(animate);
-
-			const delta = clock.getDelta();
-
-			if (mixer) mixer.update(delta);
-
-			renderer.render(scene, camera);
-
-			stats.update();
-
-		}
 		const controls = new OrbitControls(camera, renderer.domElement);
 		controls.target.set(0, 12, 0);
-		// controls.constraint.smoothZoom = true;
-		// controls.constraint.zoomDampingFactor = 0.2;
-		// controls.constraint.smoothZoomSpeed = 5.0;
 		controls.update();
 
+
+		class BasicCharacterControls {
+			constructor(params) {
+				this._Init(params);
+			}
+
+			_Init(params) {
+				this._params = params;
+				this._move = {
+					forward: false,
+					backward: false,
+					left: false,
+					right: false,
+				};
+				this._decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0);
+				this._acceleration = new THREE.Vector3(3, 1, 100);
+				this._velocity = new THREE.Vector3(0, 0, 0);
+
+				document.addEventListener('keydown', (e) => this._onKeyDown(e), false);
+				document.addEventListener('keyup', (e) => this._onKeyUp(e), false);
+			}
+
+			_onKeyDown(event) {
+				switch (event.keyCode) {
+					case 87: // w
+						this._move.forward = true;
+						break;
+					case 65: // a
+						this._move.left = true;
+						break;
+					case 83: // s
+						this._move.backward = true;
+						break;
+					case 68: // d
+						this._move.right = true;
+						break;
+					case 38: // up
+					case 37: // left
+					case 40: // down
+					case 39: // right
+						break;
+				}
+			}
+
+			_onKeyUp(event) {
+				switch (event.keyCode) {
+					case 87: // w
+						this._move.forward = false;
+						break;
+					case 65: // a
+						this._move.left = false;
+						break;
+					case 83: // s
+						this._move.backward = false;
+						break;
+					case 68: // d
+						this._move.right = false;
+						break;
+					case 38: // up
+					case 37: // left
+					case 40: // down
+					case 39: // right
+						break;
+				}
+			}
+
+			Update(timeInSeconds) {
+				const velocity = this._velocity;
+				const frameDecceleration = new THREE.Vector3(
+					velocity.x * this._decceleration.x,
+					velocity.y * this._decceleration.y,
+					velocity.z * this._decceleration.z
+				);
+				frameDecceleration.multiplyScalar(timeInSeconds);
+				frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
+					Math.abs(frameDecceleration.z), Math.abs(velocity.z));
+
+				velocity.add(frameDecceleration);
+
+				const controlObject = this._params.target;
+				const _Q = new THREE.Quaternion();
+				const _A = new THREE.Vector3();
+				const _R = controlObject.quaternion.clone();
+
+				if (this._move.forward) {
+					velocity.z += this._acceleration.z * timeInSeconds;
+				}
+				if (this._move.backward) {
+					velocity.z -= this._acceleration.z * timeInSeconds;
+				}
+				if (this._move.left) {
+					_A.set(0, 1, 0);
+					_Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y);
+					_R.multiply(_Q);
+				}
+				if (this._move.right) {
+					_A.set(0, 1, 0);
+					_Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y);
+					_R.multiply(_Q);
+				}
+
+				controlObject.quaternion.copy(_R);
+
+				const oldPosition = new THREE.Vector3();
+				oldPosition.copy(controlObject.position);
+
+				const forward = new THREE.Vector3(0, 0, 1);
+				forward.applyQuaternion(controlObject.quaternion);
+				forward.normalize();
+
+				const sideways = new THREE.Vector3(1, 0, 0);
+				sideways.applyQuaternion(controlObject.quaternion);
+				sideways.normalize();
+
+				sideways.multiplyScalar(velocity.x * timeInSeconds);
+				forward.multiplyScalar(velocity.z * timeInSeconds);
+
+				controlObject.position.add(forward);
+				controlObject.position.add(sideways);
+
+				oldPosition.copy(controlObject.position);
+			}
+		}
+
+
+		class LoadModelDemo {
+			constructor() {
+				this._Initialize();
+			}
+
+			_Initialize() {
+				this._mixers = [];
+				this._previousRAF = null;
+
+				/*this.Model();*/
+				this.LoadAnimatedModel();
+				this._RAF();
+			}
+			LoadAnimatedModel() {
+				const loader = new FBXLoader();
+				loader.setPath('resources/ac/');
+				loader.load('skeletonzombie_t_avelange.fbx', (fbx) => {
+					fbx.scale.setScalar(0.9);
+					fbx.traverse(c => {
+						c.castShadow = true;
+					});
+
+					const params = {
+						target: fbx,
+						camera: this._camera,
+					}
+					this._controls = new BasicCharacterControls(params);
+
+					const anim = new FBXLoader();
+					anim.setPath('resources/ac/');
+					anim.load('walk.fbx', (anim) => {
+						const m = new THREE.AnimationMixer(fbx);
+						this._mixers.push(m);
+						const idle = m.clipAction(anim.animations[0]);
+						idle.play();
+					});
+					scene.add(fbx);
+				});
+			}
+
+
+
+
+			_RAF() {
+				requestAnimationFrame((t) => {
+					if (this._previousRAF === null) {
+						this._previousRAF = t;
+					}
+
+					this._RAF();
+
+					//this._threejs.render(this.scene, this.camera);
+					this._Step(t - this._previousRAF);
+					this._previousRAF = t;
+				});
+			}
+
+			_Step(timeElapsed) {
+				const timeElapsedS = timeElapsed * 0.001;
+				if (this._mixers) {
+					this._mixers.map(m => m.update(timeElapsedS));
+				}
+
+				if (this._controls) {
+					this._controls.Update(timeElapsedS);
+				}
+			}
+		}
+
+		let _APP = null;
+
+		window.addEventListener('DOMContentLoaded', () => {
+			_APP = new LoadModelDemo();
+		});
 	</script>
 
 </body>
