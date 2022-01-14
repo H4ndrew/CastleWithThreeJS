@@ -9,7 +9,6 @@
 </head>
 
 <body>
-	<!-- okkkkkk -->
 
 	<script type="module">
 
@@ -45,9 +44,6 @@
 		const tiles = new THREE.MeshPhongMaterial({ map: redbrick });
 		const material = new THREE.MeshPhongMaterial({ map: brick });
 		const guardGate = new THREE.MeshPhongMaterial({ map: guardGateTexture, transparent: true });
-
-		const stats = Stats()
-		document.body.appendChild(stats.dom)
 
 		const objects = [];
 
@@ -187,8 +183,6 @@
 			for (var i = 0; i < 5; i++) {
 				for (var j = 0; j < 5; j++) {
 					plane = new THREE.Mesh(grassGeo, new THREE.MeshPhongMaterial({ map: grass }));
-					plane.castShadow = true;
-					plane.receiveShadow = true;
 					plane.position.set(x, y, z);
 					if (j % 2 == 0) {
 						plane.rotateY(Math.PI / 2);
@@ -241,7 +235,7 @@
 
 			spotLight = new THREE.SpotLight(0xffffff, 0.5);
 			spotLight.position.set(-1000, 1500, 1000);
-			spotLight.distance = 5000;
+			spotLight.distance = 0;
 			spotLight.angle = Math.PI / 5;
 			spotLight.castShadow = true;
 			spotLight.shadow.mapSize.width = 512;
@@ -251,11 +245,11 @@
 			spotLight.shadow.focus = 1;
 			scene.add(spotLight);
 
-			var lightHelper = new THREE.SpotLightHelper(spotLight, 5);
-			scene.add(lightHelper);
+			// var lightHelper = new THREE.SpotLightHelper(spotLight, 5);
+			// scene.add(lightHelper);
 
-			var shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
-			scene.add(shadowCameraHelper);
+			// var shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
+			// scene.add(shadowCameraHelper);
 
 
 			renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -277,7 +271,7 @@
 
 			const params = {
 				'light color': spotLight.color.getHex(),
-				intensity: spotLight.intensity
+				intensity: spotLight.intensity,
 			};
 
 			gui.addColor(params, 'light color').onChange(function (val) {
@@ -342,8 +336,6 @@
 						for (var j = 0; j < length; j++) {
 							const wall = new THREE.BoxGeometry(50, 50, 50);
 							const cube = new THREE.Mesh(wall, material);
-							cube.castShadow = true;
-							cube.receiveShadow = true;
 							cube.position.set(x + 25, y, z);
 							x = x + 50;
 							scene.add(cube);
@@ -357,8 +349,6 @@
 							if (indent % 2 != 0) {
 								const wall = new THREE.BoxGeometry(50, 50, 50);
 								const cube = new THREE.Mesh(wall, material);
-								cube.castShadow = true;
-								cube.receiveShadow = true;
 								cube.position.set(x + 25, y, z);
 								x = x + 50;
 								scene.add(cube);
@@ -379,8 +369,6 @@
 						for (var j = 0; j < length; j++) {
 							const wall = new THREE.BoxGeometry(50, 50, 50);
 							const cube = new THREE.Mesh(wall, material);
-							cube.castShadow = true;
-							cube.receiveShadow = true;
 							cube.position.set(x, y, z);
 							z = z + 50;
 							scene.add(cube);
@@ -394,8 +382,6 @@
 							if (indent % 2 == 0) {
 								const wall = new THREE.BoxGeometry(50, 50, 50);
 								const cube = new THREE.Mesh(wall, material);
-								cube.castShadow = true;
-								cube.receiveShadow = true;
 								cube.position.set(x, y, z);
 								z = z + 50;
 								scene.add(cube);
@@ -416,8 +402,6 @@
 						for (var j = 0; j < length; j++) {
 							const wall = new THREE.BoxGeometry(50, 50, 50);
 							const cube = new THREE.Mesh(wall, material);
-							cube.castShadow = true;
-							cube.receiveShadow = true;
 							cube.position.set(x, y, z)
 							z = z + 50
 							scene.add(cube);
@@ -431,8 +415,6 @@
 							if (indent % 2 != 0) {
 								const wall = new THREE.BoxGeometry(50, 50, 50);
 								const cube = new THREE.Mesh(wall, material);
-								cube.castShadow = true;
-								cube.receiveShadow = true;
 								cube.position.set(x, y, z);
 								z = z + 50;
 								scene.add(cube);
@@ -455,15 +437,11 @@
 							if (j > 6 && j < 14) {
 								if (j == 7 || j == 13) {
 									const cube = new THREE.Mesh(wall, material);
-									cube.castShadow = true;
-									cube.receiveShadow = true;
 									cube.position.set(x + 25, y, z)
 									scene.add(cube);
 								}
 							} else {
 								const cube = new THREE.Mesh(wall, material);
-								cube.castShadow = true;
-								cube.receiveShadow = true;
 								cube.position.set(x + 25, y, z)
 								scene.add(cube);
 							}
@@ -479,8 +457,6 @@
 								if (j != 8 && j != 10 && j != 12) {
 									const wall = new THREE.BoxGeometry(50, 50, 50);
 									const cube = new THREE.Mesh(wall, material);
-									cube.castShadow = true;
-									cube.receiveShadow = true;
 									cube.position.set(x + 25, y, z);
 									x = x + 50;
 									scene.add(cube);
@@ -508,7 +484,6 @@
 		function createTower(x, y, z) {
 			const tower = new THREE.CylinderGeometry(50, 50, 50 * 5, 320);
 			const cylinder = new THREE.Mesh(tower, material);
-			cylinder.castShadow = true;
 			cylinder.position.set(x, y, z);
 			scene.add(cylinder);
 			y = y + 225
@@ -537,54 +512,47 @@
 
 		function render() {
 			renderer.render(scene, camera);
-			stats.update();
 		}
 
 		const controls = new OrbitControls(camera, renderer.domElement);
 		controls.target.set(0, 12, 0);
 		controls.update();
 
-		stats = new Stats();
-		container.appendChild(stats.dom);
-
-
-
-
 
 		class BasicCharacterControls {
 			constructor(params) {
-				this._Init(params);
+				this._Init(params); // this. fait référence à l'object courant (la variable this a comme valeur l’objet qui est en train d’être construit.)
 			}
 
-			_Init(params) {
-				this.params = params;
-				this.move = {
+			_Init(params) {//ici on défini les paramètres à prendre en compte pour le mouvement 
+				this._params = params;
+				this._move = {
 					forward: false,
 					backward: false,
 					left: false,
 					right: false,
 				};
-				this.decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0);
-				this.acceleration = new THREE.Vector3(5, 2, 100);
-				this.velocity = new THREE.Vector3(0, 0, 0);
+				this._decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0); //THREE. est un point dans l'espace 3D
+				this._acceleration = new THREE.Vector3(3, 1, 100);
+				this._velocity = new THREE.Vector3(0, 0, 0);
 
-				document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
-				document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
+				document.addEventListener('keydown', (e) => this._onKeyDown(e), false);
+				document.addEventListener('keyup', (e) => this._onKeyUp(e), false);
 			}
 
-			onKeyDown(event) {
+			_onKeyDown(event) { //ici on controle les mouvement de notre object 3D prédéfini à l'avance en  grace au switch case 
 				switch (event.keyCode) {
 					case 87: // w
-						this.move.forward = true;
+						this._move.forward = true;
 						break;
 					case 65: // a
-						this.move.left = true;
+						this._move.left = true;
 						break;
 					case 83: // s
-						this.move.backward = true;
+						this._move.backward = true;
 						break;
 					case 68: // d
-						thismove.right = true;
+						this._move.right = true;
 						break;
 					case 38: // up
 					case 37: // left
@@ -594,19 +562,19 @@
 				}
 			}
 
-			onKeyUp(event) {
+			_onKeyUp(event) {//lorqu'on enlève le doigt sur la touche il arret d'executer 
 				switch (event.keyCode) {
 					case 87: // w
-						this.move.forward = false;
+						this._move.forward = false;
 						break;
 					case 65: // a
-						this.move.left = false;
+						this._move.left = false;
 						break;
 					case 83: // s
-						this.move.backward = false;
+						this._move.backward = false;
 						break;
 					case 68: // d
-						this.move.right = false;
+						this._move.right = false;
 						break;
 					case 38: // up
 					case 37: // left
@@ -617,41 +585,41 @@
 			}
 
 			Update(timeInSeconds) {
-				const velocity = this.velocity;
+				const velocity = this._velocity;
 				const frameDecceleration = new THREE.Vector3(
-					velocity.x * this.decceleration.x,
-					velocity.y * this.decceleration.y,
-					velocity.z * this.decceleration.z
-				);
-				frameDecceleration.multiplyScalar(timeInSeconds);
+					velocity.x * this._decceleration.x,
+					velocity.y * this._decceleration.y,
+					velocity.z * this._decceleration.z
+				);// pour obtenir la frameDecceleration on multiplie la velocité par la déccélération 
+				frameDecceleration.multiplyScalar(timeInSeconds);//mutiplyscalar multiplie le vecteur par le scalaire (timeInSeconds)
 				frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
-					Math.abs(frameDecceleration.z), Math.abs(velocity.z));
+					Math.abs(frameDecceleration.z), Math.abs(velocity.z)); //Math.sign permet de savoir le signe ; Math.abs retourne la valeur absolue;
 
 				velocity.add(frameDecceleration);
 
-				const controlObject = this.params.target;
-				const Q = new THREE.Quaternion();
-				const A = new THREE.Vector3();
-				const R = controlObject.quaternion.clone();
+				const controlObject = this._params.target;
+				const _Q = new THREE.Quaternion();
+				const _A = new THREE.Vector3();
+				const _R = controlObject.quaternion.clone();
 
-				if (this.move.forward) {
-					velocity.z += this.acceleration.z * timeInSeconds;
+				if (this._move.forward) {//mouvement en avant 
+					velocity.z += this._acceleration.z * timeInSeconds;
 				}
-				if (this.move.backward) {
-					velocity.z -= this.acceleration.z * timeInSeconds;
+				if (this._move.backward) {//mouvement en arrière
+					velocity.z -= this._acceleration.z * timeInSeconds;
 				}
-				if (this.move.left) {
-					A.set(0, 1, 0);
-					Q.setFromAxisAngle(A, Math.PI * timeInSeconds * this.acceleration.y);
-					R.multiply(Q);
+				if (this._move.left) {//permet de se tourner vers la gauche
+					_A.set(0, 1, 0);
+					_Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y);
+					_R.multiply(_Q);
 				}
-				if (this.move.right) {
-					A.set(0, 1, 0);
-					Q.setFromAxisAngle(A, -Math.PI * timeInSeconds * this.acceleration.y);
-					R.multiply(Q);
+				if (this._move.right) {//permet de se tourner vers la droite 
+					_A.set(0, 1, 0);
+					_Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y);
+					_R.multiply(_Q);
 				}
 
-				controlObject.quaternion.copy(R);
+				controlObject.quaternion.copy(_R);//quaternion est utilisé pour représenter les rotation
 
 				const oldPosition = new THREE.Vector3();
 				oldPosition.copy(controlObject.position);
@@ -677,19 +645,19 @@
 
 		class LoadModelDemo {
 			constructor() {
-				this.Initialize();
+				this._Initialize();
 			}
 
-			Initialize() {
-				this.mixers = [];
-				this.previousRAF = null;
+			_Initialize() {
+				this._mixers = [];
+				this._previousRAF = null;
 
 				/*this.Model();*/
 				this.LoadAnimatedModel();
-				this.RAF();
+				this._RAF();
 			}
 			LoadAnimatedModel() {
-				const loader = new FBXLoader();
+				const loader = new FBXLoader();//permet le bon fonctionnemennt du model (type du model 3D)
 				loader.setPath('resources/ac/');
 				loader.load('skeletonzombie_t_avelange.fbx', (fbx) => {
 					fbx.scale.setScalar(0.9);
@@ -699,15 +667,15 @@
 
 					const params = {
 						target: fbx,
-						camera: this.camera,
+						camera: this._camera,
 					}
-					this.controls = new BasicCharacterControls(params);
+					this._controls = new BasicCharacterControls(params);
 
 					const anim = new FBXLoader();
 					anim.setPath('resources/ac/');
 					anim.load('walk.fbx', (anim) => {
 						const m = new THREE.AnimationMixer(fbx);
-						this.mixers.push(m);
+						this._mixers.push(m);
 						const idle = m.clipAction(anim.animations[0]);
 						idle.play();
 					});
@@ -718,37 +686,37 @@
 
 
 
-			RAF() {
+			_RAF() {
 				requestAnimationFrame((t) => {
-					if (this.previousRAF === null) {
-						this.previousRAF = t;
+					if (this._previousRAF === null) {
+						this._previousRAF = t;
 					}
 
-					this.RAF();
+					this._RAF();
 
 					//this._threejs.render(this.scene, this.camera);
-					this.Step(t - this.previousRAF);
-					this.previousRAF = t;
+					this._Step(t - this._previousRAF);
+					this._previousRAF = t;
 				});
 			}
 
-			Step(timeElapsed) {
+			_Step(timeElapsed) {
 				const timeElapsedS = timeElapsed * 0.001;
-				if (this.mixers) {
-					this.mixers.map(m => m.update(timeElapsedS));
+				if (this._mixers) {
+					this._mixers.map(m => m.update(timeElapsedS));
 				}
 
-				if (this.controls) {
-					this.controls.Update(timeElapsedS);
+				if (this._controls) {
+					this._controls.Update(timeElapsedS);
 				}
 			}
 		}
 
-		let APP = null;
+		let _APP = null;
 
 		window.addEventListener('DOMContentLoaded', () => {
-			APP = new LoadModelDemo();
-		});
+			_APP = new LoadModelDemo();
+		});//LoadModel est chargé après que le chateau soit bien telechargé
 	</script>
 
 </body>
