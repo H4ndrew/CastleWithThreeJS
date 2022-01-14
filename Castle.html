@@ -25,7 +25,7 @@
 		let plane, road, door, gate, castleWindow, court;
 		let pointer, raycaster, spotLight;
 		let cubeGeo, cubeMaterial;
-		let gui, sun;
+		let gui, sun, fbx1;
 
 		const TextureLoader = new THREE.TextureLoader();
 
@@ -47,6 +47,7 @@
 
 		const stats = Stats()
 		document.body.appendChild(stats.dom)
+
 
 		const objects = [];
 
@@ -215,7 +216,7 @@
 			z = 600;
 
 			for (var i = 0; i < 2; i++) {
-				road = new THREE.Mesh(roadGeo, new THREE.MeshPhongMaterial({ map: paving }));
+				road = new THREE.Mesh(roadGeo, new THREE.MeshPhongMaterial({ map: paving, receiveShadow: true }));
 				road.position.set(x, y, z);
 				scene.add(road);
 				z = z - 300;
@@ -528,25 +529,6 @@
 
 		}
 
-		function onPointerMove(event) {
-			pointer.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
-			raycaster.setFromCamera(pointer, camera);
-			render();
-		}
-
-		function render() {
-			renderer.render(scene, camera);
-			stats.update();
-		}
-
-		const controls = new OrbitControls(camera, renderer.domElement);
-		controls.target.set(0, 12, 0);
-		controls.update();
-
-
-
-
-
 
 		class BasicCharacterControls {
 			constructor(params) {
@@ -581,7 +563,7 @@
 						this.move.backward = true;
 						break;
 					case 68: // d
-						thismove.right = true;
+						this.move.right = true;
 						break;
 					case 38: // up
 					case 37: // left
@@ -683,14 +665,43 @@
 
 				/*this.Model();*/
 				this.LoadAnimatedModel();
+				this.LoadAnimatedModel2();
+				this.LoadAnimatedModel3();
 				this.RAF();
 			}
 			LoadAnimatedModel() {
 				const loader = new FBXLoader();//permet le bon fonctionnemennt du model (type du model 3D)
 				loader.setPath('resources/ac/');
-				loader.load('skeletonzombie_t_avelange.fbx', (fbx) => {
+				loader.load('mremireh_o_desbiens.fbx', (fbx1) => {
+					fbx1.scale.setScalar(0.9);
+
+					fbx1.traverse(c => {
+						c.castShadow = true;
+					});
+
+					const params = {
+						target: fbx1,
+						camera: this.camera,
+					}
+					this.controls = new BasicCharacterControls(params);
+
+					const anim = new FBXLoader();
+					anim.setPath('resources/ac/');
+					anim.load('walk.fbx', (anim) => {
+						const m = new THREE.AnimationMixer(fbx1);
+						this.mixers.push(m);
+						const idle = m.clipAction(anim.animations[0]);
+						idle.play();
+					});
+					fbx1.position.set(-600, 0, 0);
+					scene.add(fbx1);
+				});
+			}
+			LoadAnimatedModel2() {
+				const loader = new FBXLoader();//permet le bon fonctionnemennt du model (type du model 3D)
+				loader.setPath('resources/ac/');
+				loader.load('mremireh_o_desbiens.fbx', (fbx) => {
 					fbx.scale.setScalar(0.9);
-					fbx.position.set(-600, 60, 60);
 					fbx.traverse(c => {
 						c.castShadow = true;
 					});
@@ -703,13 +714,41 @@
 
 					const anim = new FBXLoader();
 					anim.setPath('resources/ac/');
-					anim.load('walk.fbx', (anim) => {
+					anim.load('walking.fbx', (anim) => {
+						const m = new THREE.AnimationMixer(fbx);
+						this.mixers.push(m);
+						const idle = m.clipAction(anim.animations[0]);
+						idle.play();
+					});
+					fbx.position.set(600, 0, 0);
+					scene.add(fbx);
+				});
+			}
+			LoadAnimatedModel3() {
+				const loader = new FBXLoader();//permet le bon fonctionnemennt du model (type du model 3D)
+				loader.setPath('resources/ac/');
+				loader.load('spider man homecoming.fbx', (fbx) => {
+					fbx.scale.setScalar(0.9);
+					fbx.traverse(c => {
+						c.castShadow = true;
+					});
+
+					const params = {
+						target: fbx,
+						camera: this._camera,
+					}
+					this._controls = new BasicCharacterControls(params);
+
+					const anim = new FBXLoader();
+					anim.setPath('resources/ac/');
+					anim.load('Walk In Circle.fbx', (anim) => {
 						const m = new THREE.AnimationMixer(fbx);
 						this.mixers.push(m);
 						const idle = m.clipAction(anim.animations[0]);
 						idle.play();
 					});
 					scene.add(fbx);
+					fbx.position.set(-50, 10, 500);
 				});
 			}
 
@@ -747,6 +786,25 @@
 		window.addEventListener('DOMContentLoaded', () => {
 			APP = new LoadModelDemo();//LoadModel est chargé après que le chateau soit bien telechargé
 		});
+
+
+		function onPointerMove(event) {
+			pointer.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
+			raycaster.setFromCamera(pointer, camera);
+			render();
+		}
+
+		function render() {
+			renderer.render(scene, camera);
+			stats.update();
+			fbx1.position.z += 0.1;
+
+		}
+
+		const controls = new OrbitControls(camera, renderer.domElement);
+		controls.target.set(0, 12, 0);
+		controls.update();
+
 	</script>
 
 </body>
