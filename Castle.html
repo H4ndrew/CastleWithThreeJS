@@ -76,6 +76,7 @@
 	<script type="module">
 
 		import * as THREE from '../three.js/build/three.module.js';
+		import { FirstPersonControls } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/controls/FirstPersonControls.js';
 		import { OrbitControls } from '../three.js/examples/jsm/controls/OrbitControls.js';
 		import { CameraControls } from '../three.js/examples/jsm/controls/experimental/CameraControls.js';
 		import { GUI } from '../three.js/examples/jsm/libs/dat.gui.module.js';
@@ -866,33 +867,37 @@
 
 		}
 
-		/* let audio = new THREE.AudioListener();
-		cam.add(audio);
-
-		let sounds1 = new THREE.PositionalAudio(audio);
-		let loader = new THREE.AudioLoader().load('./audio/Générique Merlin.ogg', 
-		(res)=>{
-			sounds1.setBuffer(res);
-			sounds1.setRefDistance(1);
-			/* sounds1.play(); 
-		});
-		fbx.add(sounds1);
-		
-		let clock = new THREE.Clock ;
-		let controls = new THREE.FirstPersonControl(cam, renderer.domElement);
-		controls.lookSpeed = 0.05;
-		controls.movementSpeed = 6;
-
-		function draw() {
-			controls.update(clock.getDelta());
-			renderer.render(scene , cam );
-			requestAnimationFrame(draw);
-		}
-		draw(); */
 
 		const controls = new OrbitControls(camera, renderer.domElement);
 		controls.target.set(0, 12, 0);
 		controls.update(); 
+
+
+		
+
+				// create an AudioListener and add it to the camera
+				const listener = new THREE.AudioListener();
+		camera.add( listener );
+
+		// create the PositionalAudio object (passing in the listener)
+		const sound = new THREE.PositionalAudio( listener );
+
+		// load a sound and set it as the PositionalAudio object's buffer
+		const audioLoader = new THREE.AudioLoader();
+		audioLoader.load( './audio/Générique Merlin.ogg', function( buffer ) {
+			sound.setBuffer( buffer );
+			sound.setRefDistance( 20 );
+			sound.play();
+		});
+
+		// create an object for the sound to play from
+		
+		
+		const mesh = new THREE.Mesh( tower, guardGate );
+		scene.add( mesh );
+
+		// finally add the sound to the mesh
+		mesh.add( sound );
 
 		
 
