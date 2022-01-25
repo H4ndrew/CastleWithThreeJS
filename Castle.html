@@ -9,6 +9,69 @@
 </head>
 
 <body>
+	<body>
+
+		<style>
+			html,
+			body {
+				height: 100%;
+				margin: 0;
+			}
+	
+	
+			#overlay {
+				position: absolute;
+				z-index: 2;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(0, 0, 0, 0.7);
+			}
+	
+			#overlay button {
+				background: #ffffff;
+				border: 0;
+				color: #000000;
+				padding: 16px 20px;
+				text-transform: uppercase;
+				cursor: pointer;
+			}
+	
+			#info {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				padding: 10px;
+				box-sizing: border-box;
+				text-align: center;
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				pointer-events: none;
+				z-index: 1; /* TODO Solve this in HTML */
+				color: #9effff;
+			}
+		</style>
+		
+	
+	<script>
+	function remove(elem){
+		elem.parentNode.removeChild(elem);
+	  }
+	</script>
+	
+	<div id="overlay", onclick="remove(this)">
+		<button id="startButton">click></button></div>
+	
+	<div id="info">
+		1PLIKÉ140
+	</div>
+		
 
 	<script type="module">
 
@@ -787,6 +850,8 @@
 			APP = new LoadModelDemo();//LoadModel est chargé après que le chateau soit bien telechargé
 		});
 
+		
+
 
 		function onPointerMove(event) {
 			pointer.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
@@ -801,9 +866,35 @@
 
 		}
 
+		/* let audio = new THREE.AudioListener();
+		cam.add(audio);
+
+		let sounds1 = new THREE.PositionalAudio(audio);
+		let loader = new THREE.AudioLoader().load('./audio/Générique Merlin.ogg', 
+		(res)=>{
+			sounds1.setBuffer(res);
+			sounds1.setRefDistance(1);
+			/* sounds1.play(); 
+		});
+		fbx.add(sounds1);
+		
+		let clock = new THREE.Clock ;
+		let controls = new THREE.FirstPersonControl(cam, renderer.domElement);
+		controls.lookSpeed = 0.05;
+		controls.movementSpeed = 6;
+
+		function draw() {
+			controls.update(clock.getDelta());
+			renderer.render(scene , cam );
+			requestAnimationFrame(draw);
+		}
+		draw(); */
+
 		const controls = new OrbitControls(camera, renderer.domElement);
 		controls.target.set(0, 12, 0);
-		controls.update();
+		controls.update(); 
+
+		
 
 	</script>
 
